@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <title>index.html</title>
+	<!-- thymeleaf 要使用闭合标签<h1 th:text="${resource.name}"></h1>-->
+    <!-- 引入静态资源文件-->
+    <!-- <script th:src="@{/static/js/test.js}" type="text/javascript"></script> -->
+  </head>
+  <body>
+    <!-- <h1 th:text="${resource.name}">SpringBoot</h1> -->
+    
+    <!-- 引入对象-->
+    <!-- 方式1-->
+    <div th:object="${user}">
+    <h1 th:text="*{name}"></h1>
+    <h1 th:text="*{age}"></h1>
+    <h1 th:text="*{birthday}"></h1>
+    <h1 th:text="*{#dates.format(birthday,'yyyy-MM-dd')}"></h1> 
+    </div>
+    
+    <!-- 方式2 -->
+    <!-- <h1 th:text="${user.name}"></h1>
+    <h1 th:text="${user.age}"></h1>
+    <h1 th:text="${user.birthday}"></h1>
+    <h1 th:text="${#dates.format(user.birthday,'yyyy-MM-dd')}"></h1> -->
+    
+    <!-- URL-->
+    <!-- <a th:href="@{http://www.baidu.com}">百度一下</a> -->
+    
+    <!-- form表单 -->
+    <!-- <form th:action="@{/thy/postform}" th:object="${user}" th:method="post">
+    	姓名:<input type="text" th:field="*{name}"></input>
+    	<input type="submit"></input>
+    </form> -->
+    <!-- <table>
+    	<tr>
+    		<th>姓名</th>
+    		<th>年龄</th>
+    		<th>生日</th>
+    	</tr>
+    	<tr th:each="user:${userList}">
+    		<td th:text="${user.name}"></td>
+    		<td th:text="${user.age}"></td>
+    		<td th:text="${#dates.format(user.birthday,'yyyy-MM-dd HH:mm:ss')}"></td>
+    	</tr>
+    </table> -->
+    
+    <!-- 注意：#{roles.superadmin}读取的是messages.properties文件内容 -->
+    <!-- <div th:switch="${user.name}">
+    	<h1 th:case="lee">Lee</h1>
+    	<h1 th:case="#{roles.manager}">管理员</h1>
+    	<h1 th:case="#{roles.superadmin}">超级管理员</h1>
+    	<h1 th:case="*">其他用户</h1>
+    </div> -->
+  </body>
+</html>
