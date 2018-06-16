@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+	http://www.springframework.org/schema/beans/spring-beans.xsd
+	http://www.springframework.org/schema/context
+	http://www.springframework.org/schema/context/spring-context.xsd">
+
+	<!-- 导入公共配置 -->
+	<import resource="common.xml"/>
+	
+	<!-- 配置消息监听器 -->
+	<bean id="consumerMessageListener" class="com.jms.service.impl.ConsumerMessageListener"></bean>
+	
+	<!-- 配置消息监听容器 -->
+	<bean id="messageListenerContainer" class="org.springframework.jms.listener.DefaultMessageListenerContainer">
+		<property name="connectionFactory" ref="connectionFactory"></property>
+		<!-- 指定队列模式的目的地 -->
+		<!-- <property name="destination" ref="queueDetination"></property> -->
+		<!-- 指定主题模式的目的地 -->
+		<property name="destination" ref="topicDetination"></property>
+		<property name="messageListener" ref="consumerMessageListener"></property>
+	</bean>
+	
+	<bean id="consumerService" class="com.jms.service.impl.ConsumerServiceImpl"></bean>
+	
+</beans>

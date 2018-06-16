@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+	http://www.springframework.org/schema/beans/spring-beans.xsd
+	http://www.springframework.org/schema/context
+	http://www.springframework.org/schema/context/spring-context.xsd">
+
+	<!-- 导入公共配置 -->
+	<import resource="common.xml"/>
+	
+	<!-- 
+	配置JmsTemplate用于发送消息 
+	1.JmsTemplate是spring提供的，
+	只需向Spring容器中注册这个类就可以使用JmsTemplate操作jms
+	-->
+	<bean id="jmsTemplate" class="org.springframework.jms.core.JmsTemplate">
+		<property name="connectionFactory" ref="connectionFactory"></property>
+	</bean>
+	
+	<bean id="producerServiceImpl" class="com.jms.service.impl.ProducerServiceImpl"/>
+
+</beans>

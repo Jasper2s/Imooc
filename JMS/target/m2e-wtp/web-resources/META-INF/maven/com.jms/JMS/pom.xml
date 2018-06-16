@@ -1,0 +1,55 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>com.jms</groupId>
+  <artifactId>JMS</artifactId>
+  <packaging>war</packaging>
+  <version>0.0.1-SNAPSHOT</version>
+  <name>JMS Maven Webapp</name>
+  <url>http://maven.apache.org</url>
+  <dependencies>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>3.8.1</version>
+      <scope>test</scope>
+    </dependency>
+    
+    <!-- 添加activemq依赖 -->
+    <dependency>
+      <groupId>org.apache.activemq</groupId>
+      <artifactId>activemq-all</artifactId>
+      <version>5.15.4</version>
+    </dependency>
+    
+    <!-- 添加Spring依赖 -->
+    <dependency>
+    <groupId>org.springframework</groupId>
+    <artifactId>spring-context</artifactId>
+    <version>4.3.14.RELEASE</version>    
+	</dependency>
+	
+	<dependency>
+    <groupId>org.springframework</groupId>
+    <artifactId>spring-jms</artifactId>
+    <version>4.3.14.RELEASE</version>
+	</dependency>
+	
+	<dependency>
+	    <groupId>org.apache.activemq</groupId>
+	    <artifactId>activemq-core</artifactId>
+	    <version>5.7.0</version>
+	    <!-- 不包含 activemq中的spring-context的jar包-->
+	    <exclusions>
+	    	<exclusion>
+		    	<groupId>org.springframework</groupId>
+	    		<artifactId>spring-context</artifactId>
+	    	</exclusion>
+	    </exclusions>
+	</dependency>
+	
+  </dependencies>
+  <build>
+    <finalName>JMS</finalName>
+  </build>
+</project>
