@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Ajax跨域请求</title>
+<!-- <script type="text/javascript" src="js/jquery-3.2.1.min.js"></script> -->
+ <!-- 引入静态资源文件-->
+ <script th:src="@{/static/js/jquery-3.2.1.min.js}" type="text/javascript"></script>
+</head>
+<body>
+<a href="#" onclick="getRequest();">Ajax跨域请求</a>
+<a href="http://localhost:8081/ajaxserver/hello">非Ajax请求</a>
+<a href="#" onclick="getRequest2();">非简单请求</a>
+<a href="#" onclick="getRequest3();">带Cookie的跨域请求</a>
+<script type="text/javascript">
+	function getRequest(){
+		console.log("getRequest");
+		$.ajax({
+			url:"http://localhost:8081/ajaxserver/hello",
+			dataType:"JSON",
+			type:"POST",
+			//cache:true,//表示请求可以被缓存
+			async:true,
+			success:function(data){
+				console.log(data);
+			},
+			error:function(){
+				alert("error");
+			}
+		});
+	}
+	
+	function getRequest2(){
+		console.log("getRequest2");
+		$.ajax({
+			url:"http://localhost:8081/ajaxserver/getuser",
+			dataType:"JSON",
+			type:"POST",
+			data:{"name":"Jasper","age":20,"sex":"man"},//请求的数据为JSON对象
+			//cache:true,//表示请求可以被缓存
+			async:true,
+			success:function(data_response){
+				console.log(data_response);
+			},
+			error:function(){
+				alert("error");
+			}
+		});
+	}
+	
+	function getRequest3(){
+		console.log("getRequest3");
+		$.ajax({
+			url:"http://localhost:8081/ajaxserver/getcookie",
+			dataType:"JSON",
+			//data:{"data":"get Cookie"},
+			type:"GET",
+			xhrFields:{withCredentials:true},//发送Ajax请求时带Cookie
+			async:true,
+			success:function(data_response){
+				console.log(data_response);
+			},
+			error:function(){
+				alert("error");
+			}
+		});
+	}
+</script>
+</body>
+</html>
