@@ -11,7 +11,7 @@ import com.javamail.service.impl.UserServiceImpl;
 import com.javamail.vo.UserVO;
 
 /**
- * ÓÊÏä¼¤»î
+ * ï¿½ï¿½ï¿½ä¼¤ï¿½ï¿½
  */
 public class ActiveServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
@@ -36,15 +36,15 @@ public class ActiveServlet extends HttpServlet {
 		UserService userService=new UserServiceImpl();
 		UserVO user=userService.findUserByCode(code);
 		
-		if(user!=null){//ÓÃ»§ÒÑ¾­´æÔÚ
+		if(user!=null){//ï¿½Ã»ï¿½ï¿½Ñ¾ï¿½ï¿½ï¿½ï¿½ï¿½
 			user.setState("1");
 			user.setCode(null);
 			userService.updateUser(user);
-			request.setAttribute("msg", "ÓÃ»§¼¤»î³É¹¦");
+			request.setAttribute("msg", "ï¿½Ã»ï¿½ï¿½ï¿½ï¿½ï¿½É¹ï¿½");
 			request.getRequestDispatcher("/msg.jsp").forward(request, response);
 		}else{
-			//¼¤»îÂëÓÐÎó£¬ÓÃ»§²»´æÔÚ
-			request.setAttribute("msg", "¼¤»îÂëÓÐÎó£¬ÓÃ»§²»´æÔÚ");
+			//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ã»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+			request.setAttribute("msg", "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ã»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½");
 			request.getRequestDispatcher("/msg.jsp").forward(request, response);
 		}
 	}
