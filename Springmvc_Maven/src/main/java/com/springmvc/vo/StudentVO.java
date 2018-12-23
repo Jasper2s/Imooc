@@ -1,5 +1,9 @@
 package com.springmvc.vo;
-
+/**
+ * 学生实体类
+ * @author qiuzhiwen
+ *
+ */
 public class StudentVO {
 	
 	private String id;
