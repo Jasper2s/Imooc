@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.springmvc.dao.IStudentDao">
+	
+	<resultMap id="studentMap" type="com.springmvc.vo.StudentVO">
+		<result column="id" property="id"/>
+		<result column="name" property="name"/>
+		<result column="age" property="age"/>
+		<result column="score" property="score"/>
+	</resultMap>
+	
+	<select id="getStudent" resultMap="studentMap">
+		select * from student
+	</select>
+	
+	<insert id="addStudent" parameterType="com.springmvc.vo.StudentVO">
+		insert into student(id,name,age,score) 
+		values(#{id},#{name},#{age},#{score})
+	</insert>
+	
+</mapper>

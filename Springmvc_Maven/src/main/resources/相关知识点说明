@@ -1,0 +1,55 @@
+1.web.xml文件加载过程：
+当我们启动一个WEB项目容器时，容器包括(JBoss,Tomcat，Jetty等)。首先会去读取web.xml配置文件里的配置，
+当这一步骤没有出错并且完成之后，项目才能正常的被启动起来。
+（1）启动WEB项目的时候，容器首先会去读取web.xml配置文件中的两个节点：<listener> </listener>
+和<context-param> </context-param>
+（2）紧接着，容器创建一个ServletContext(application),这个web项目的所有部分都将共享这个上下文。
+容器以<context-param></context-param>的name作为键，value作为值，将其转化为键值对，存入ServletContext。　　
+（3）容器创建<listener></listener>中的类实例，根据配置的class类路径<listener-class>来创建监听，
+在监听中会有初始化方法，启动Web应用时，系统调用Listener的该方法 contextInitialized(ServletContextEvent args)，
+在这个方法中获得：ServletContext application =ServletContextEvent.getServletContext();
+context-param的值= application.getInitParameter("context-param的键");
+得到这个context-param的值之后，你就可以做一些操作了。
+举例：你可能想在项目启动之前就打开数据库，那么这里就可以在<context-param>中设置数据库的连接方式
+（驱动、url、user、password），在监听类中初始化数据库的连接。这个监听是自己写的一个类，除了初始化方法，
+它还有销毁方法，用于关闭应用前释放资源。比如:说数据库连接的关闭，此时，
+调用contextDestroyed(ServletContextEvent args)，关闭Web应用时，系统调用Listener的该方法。
+接着，容器会读取<filter></filter>，根据指定的类路径来实例化过滤器。
+（4）以上都是在WEB项目还没有完全启动起来的时候就已经完成了的工作。如果系统中有Servlet，
+则Servlet是在第一次发起请求的时候被实例化的，而且一般不会被容器销毁，它可以服务于多个用户的请求。
+所以，Servlet的初始化都要比上面提到的那几个要迟。
+总的来说，web.xml的加载顺序是: <context-param>-> <listener> -> <filter> -> <servlet>。
+其中，如果web.xml中出现了相同的元素，则按照在配置文件中出现的先后顺序来加载。
+
+2.Mybatis的Dao层不需要实例化的原因：
+<bean  class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+	<property name="basePackage" value="com.springmvc.dao" />
+	<property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"/>
+</bean> 
+MapperScannerConfigurer，让它扫描特定的包，自动帮我们成批地创建映射器。这样就大大减少了配置的工作量。 
+basePackage属性是让你为映射器接口文件设置基本的包路径。可以使用分号或逗号作为分隔符设置多于一个的包路径。
+每个映射器都会在指定的包路径中递归地被搜索到。被发现的映射器将会使用spring对自动侦测组件默认的命名策略来命名。
+也就是说，如果没有发现注解，它就会使用映射器的非大写的非完全限定类名。如果发现了@Component或JSR-330@Named注解，
+它会获取名称。 
+通过上面的配置，spring就会帮助我们对com.springmvc.dao下面所有接口进行自动的注入，
+而不需要为每个接口重复在Spring配置文件中进行声明了。那么这个功能如何做到的呢？
+MapperScannerConfigurer类的代码片段：
+@Override
+  public void postProcessBeanDefinitionRegistry(BeanDefinitionRegistry registry) {
+    if (this.processPropertyPlaceHolders) {
+      processPropertyPlaceHolders();
+    }
+
+    ClassPathMapperScanner scanner = new ClassPathMapperScanner(registry);
+    scanner.setAddToConfig(this.addToConfig);
+    scanner.setAnnotationClass(this.annotationClass);
+    scanner.setMarkerInterface(this.markerInterface);
+    scanner.setSqlSessionFactory(this.sqlSessionFactory);
+    scanner.setSqlSessionTemplate(this.sqlSessionTemplate);
+    scanner.setSqlSessionFactoryBeanName(this.sqlSessionFactoryBeanName);
+    scanner.setSqlSessionTemplateBeanName(this.sqlSessionTemplateBeanName);
+    scanner.setResourceLoader(this.applicationContext);
+    scanner.setBeanNameGenerator(this.nameGenerator);
+    scanner.registerFilters();
+    scanner.scan(StringUtils.tokenizeToStringArray(this.basePackage, ConfigurableApplicationContext.CONFIG_LOCATION_DELIMITERS));
+  }

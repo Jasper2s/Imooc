@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app version="2.5" 
+xmlns="http://java.sun.com/xml/ns/javaee" 
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+xsi:schemaLocation="http://java.sun.com/xml/ns/javaee 
+http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
+  
+  <!-- 项目名称 -->
+  <display-name>Springmvc_Maven</display-name>
+  
+  <!-- 项目默认首页 -->
+  <welcome-file-list>
+    <welcome-file>index.html</welcome-file>
+    <welcome-file>index.htm</welcome-file>
+    <welcome-file>index.jsp</welcome-file>
+  </welcome-file-list>
+  
+  	<!-- 配置上下文初始化参数 -->
+  	<!-- 配置Spring和Mybatis整合的配置文件spring.xml,spring-mybatis.xml -->
+    <context-param>
+        <param-name>contextConfigLocation</param-name>
+        <param-value>classpath:spring.xml,classpath:spring-mybatis.xml</param-value>
+    </context-param>
+  
+  
+   <!-- 配置字符集过滤器 -->
+    <filter>
+    	<description>字符集过滤器</description>
+        <filter-name>characterEncodingFilter</filter-name>
+        <filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+        <init-param>
+            <param-name>encoding</param-name>
+            <param-value>UTF-8</param-value>
+        </init-param>
+        <init-param>
+            <param-name>forceEncoding</param-name>
+            <param-value>true</param-value>
+        </init-param>
+    </filter>
+
+    <filter-mapping>
+        <filter-name>characterEncodingFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+  
+    <!-- 配置加载上下文的监听器 
+    Spring提供ServletContextListener接口的一个实现类ContextLoaderListener监听器，
+    该类可以作为Listener使用，在启动Tomcat容器的时候，该类的作用就是自动装载ApplicationContext的配置信息，
+    如果没有设置contextConfigLocation的初始参数则会使用默认参数WEB-INF路径下的application.xml文件。
+    如果需要自定义读取多个配置文件或者修改默认路径，则可以在web.xml中设置
+　　	ContextLoaderListener会读取这些XML文件并产生WebApplicationContext对象，
+	然后将这个对象放置在ServletContext的属性里，这样只要我们得到Servlet就可以得到WebApplicationContext对象，
+	并利用这个对象访问spring容器管理的bean。 -->
+  	<listener>
+        <listener-class>
+            org.springframework.web.context.ContextLoaderListener
+        </listener-class>
+    </listener>
+    
+	    <!-- 配置Spring MVC，指定处理请求的Servlet，有两种方式：
+	　　(1)默认查找MVC配置文件的地址是：/WEB-INF/${servletName}-servlet.xml。
+	　　(2)可以通过修改配置文件的位置，需要在配置DispatcherServlet时指定MVC配置文件的位置。 
+		-->
+     <servlet>
+        <servlet-name>DispatcherServlet</servlet-name>
+        <servlet-class>
+            org.springframework.web.servlet.DispatcherServlet
+        </servlet-class>
+        <!-- 加载Springmvc配置文件spring-mvc.xml -->
+        <init-param>
+            <param-name>contextConfigLocation</param-name>
+            <param-value>classpath:spring-mvc.xml</param-value>
+        </init-param>
+        <!-- 使系统在启动时装载servlet而不是第一个servlet被访问 -->
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+
+    <servlet-mapping>
+    <!--这个Servlet的名字是dispatcher，可以有多个DispatcherServlet，是通过名字来区分的。每一个DispatcherServlet有自己的WebApplicationContext上下文对象。同时保存的ServletContext中和Request对象中.-->  
+        <servlet-name>DispatcherServlet</servlet-name>
+         <!--Servlet拦截匹配规则可以自已定义，当映射为@RequestMapping("/user/add")时，为例,拦截哪种URL合适？-->  
+        <!--1、拦截*.do、*.htm， 例如：/user/add.do,这是最传统的方式，最简单也最实用。不会导致静态文件（jpg,js,css）被拦截。-->  
+        <!--2、拦截/，例如：/user/add,可以实现现在很流行的REST风格。很多互联网类型的应用很喜欢这种风格的URL。弊端：会导致静态文件（jpg,js,css）被拦截后不能正常显示。 -->  
+        <url-pattern>/</url-pattern>
+    </servlet-mapping>
+    
+    <!-- 配置session过期时间120分钟 -->
+    <session-config>  
+        <session-timeout>30</session-timeout>  
+    </session-config>
+
+	<!-- 错误页面配置 -->
+    <error-page>
+        <error-code>404</error-code>
+        <location>/404.jsp</location>
+    </error-page>
+  
+</web-app>
